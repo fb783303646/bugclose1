@@ -1,0 +1,18 @@
+{
+  "name": "wechat_v3",
+  "version": "0.0.1",
+  "description": "bugclose-v1.0",
+  "author": "AeroJin <AeroJin@126.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/airyland/vux"
+  },
+  "license": "MIT",
+  "main": "dist/vux.js",
+  "dependencies": {
+    "vue-infinite-scroll": "^2.0.0",
+    "vuex": "^2.1.1",
+    "vux-xscroll": "^3.1.8"
+  },
+  "devDependencies": {}
+}

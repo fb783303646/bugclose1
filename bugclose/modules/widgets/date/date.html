@@ -1,0 +1,35 @@
+<div id="calendar">
+    <!-- 年份 月份 -->
+    <div class="month">
+        <ul >
+            <li class="arrow" @click="pickPre(monthData.year,monthData.month)">❮</li>
+            <li class="year-month" >
+                <span class="choose-year">{{monthData.year}}</span><span class="choose-month">{{monthData.month}}月</span>
+            </li>
+            <li class="arrow" @click="pickNext(monthData.year,monthData.month)" >❯</li>
+        </ul>
+    </div>
+    <!-- 星期 -->
+    <ul class="weekdays">
+        
+        <li>一</li>
+        <li>二</li>
+        <li>三</li>
+        <li>四</li>
+        <li>五</li>
+        <li style="color:red">六</li>
+        <li style="color:red">日</li>
+    </ul>
+    <!-- 日期 -->
+    <ul class="days">
+        <li @click="pick(monthData.year,item.month,item.showDate)"  v-for="item in monthData.days">
+            <!--本月-->
+        <span v-if="item.month < monthData.month || item.month > monthData.month" class="other-month">
+            <span class="sh">{{item.showDate}}</span>
+        </span>
+        <span v-else> 
+            <span class="sh">{{ item.showDate }}</span>
+        </span>
+        </li>
+    </ul>
+</div>

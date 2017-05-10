@@ -1,0 +1,927 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>bugclose0.0</title>
+    <link rel="import" href="includes/meta.html?__inline">
+</head>
+<body >
+   <div id="wrap">
+      <link rel="import" href="includes/header.html?__inline">
+
+      <div class="wrapper" v-if="!ismyproject">
+        <!-- 侧边栏start -->
+        <nav class="navber-side fl" >
+          <div class="side-box">
+            <div class="project-img relative" >
+                <p ><img src="/views/img/app-default.jpg" ><span class="bg"></span><span class="btn"><br>刷新项目</span></p>
+            </div>
+            <ul class="nav side-menu" :class="[context]">
+              <li class="divider"></li>
+              <li class="iconPro" @click="change('iconPro')" >
+                  <a href="javascript:void(0)"><i class="fa icon-pro"></i><span class="nav-label">项目概况</span></a>
+              </li>
+            <!--   <li class="iconAt" @click="change('iconAt')" >
+                  <a href="javascript:void(0)"><i class="fa icon-at"></i> <span class="nav-label">活动问题 <sup class="badge bgDefault" id="bugsActive">{{tipsnmb.activenmb}}</sup></span></a>
+              </li> -->
+              <li  class="iconQs" @click="change('iconQs')" >
+                  <a href="javascript:void(0)"><i class="fa icon-qs"></i> <span class="nav-label">所有问题</span></a>
+              </li>
+              
+              <li class="divider"></li>
+             <!--  <li class="iconDb" @click="change('iconDb')" >
+                  <a href="javascript:void(0)"><i class="fa icon-db"></i> <span class="nav-label">我的待办 <sup class="badge" id="bugsAssignToMe">{{tipsnmb.mynmb}}</sup></span></a>
+              </li>
+            
+              <li class="iconMyget" @click="change('iconMyget')" >
+                  <a href="javascript:void(0)"><i class="fa icon-myget"></i> <span class="nav-label">我的分配</span></a>
+              </li>
+              <li class="divider"></li> -->
+
+            </ul>
+          </div>
+        </nav>
+         <!-- 侧边栏end -->
+        <!-- page页面 start -->
+        <div class="bug-context" :class="[context]">
+            <div class="item-box iconPro">
+                <div class="hd-box clearfix">
+                    <h4 @click="bugclick()"  class="fl">项目概况</h4>
+                    <div class="hd-btn-box fr">
+                      <a class="hd-btn icon-problem" @click="submintfn()" href="javascript:void(0)">提交问题</a>
+                    </div>
+                </div>
+
+                <div class="main-contant-body" >
+                  <div class="pd12">
+                      <ul class="bugNum clearfix" >
+                        <li @click="change('iconQs')" >
+                          <div class="cell all" :class="{active:infoNmb.totalNumber < 1}" ><em class="info">总数</em><span>{{infoNmb.totalNumber}}</span></div>
+                        </li>
+                        <li >
+                          <div class="cell open" :class="{active:infoNmb.notSolved < 1}"><em class="danger">未解决</em><span>{{infoNmb.notSolved}}</span></div>
+                        </li>
+                        <li >
+                          <div class="cell fixed" :class="{active:infoNmb.toAudit < 1}"><em class="warning">待审核</em><span>{{infoNmb.toAudit}}</span></div>
+                        </li>
+                        <li >
+                          <div class="cell rejected" :class="{active:infoNmb.hasRefused < 1}"><em class="success">已拒绝</em><span>{{infoNmb.hasRefused}}</span></div>
+                        </li>
+                        <li >
+                          <div class="cell resolved" :class="{active:infoNmb.resolved < 1}"><em class="success">已解决</em><span>{{infoNmb.resolved}}</span></div>
+                        </li>
+                        <li >
+                          <div class="cell postponed" :class="{active:infoNmb.beenPostponed < 1}"><em class="success">已延期</em><span>{{infoNmb.beenPostponed}}</span></div>
+                        </li>
+                        <li>
+                          <div class="cell closed" :class="{active:infoNmb.closed < 1}"><em class="success">已关闭</em><span>{{infoNmb.closed}}</span></div>
+                        </li>
+                      </ul>
+                  </div>
+                  <div class="">
+                      <ul class="priorityCount" style="display: block;">
+                          <li id="projectHealth" class="projectHealth">
+                            <div class="cell " :class="healthClass" >
+                              <em class="info">健康指数</em><span>{{infoNmb.health}}</span><p><i class="fa fa-tachometer"></i></p>
+                            </div>
+                          </li>
+                          <li style="width: 42.857142857142%;vertical-align: top;">
+                              <ul id="bugTypeCount" class="bugTypeCount clearfix">
+                                <li data-bugtype="Bug">
+                                  <div class="cell ">
+                                    <span class="label label-danger" :class="{active:infoNmb.defects < 1}" ><em>缺陷</em> <span>{{infoNmb.defects}}</span></span>
+                                  </div>
+                                </li>
+                                <li data-bugtype="Task">
+                                  <div class="cell">
+                                    <span class="label label-warning" :class="{active:infoNmb.task < 1}"><em>任务</em> <span>{{infoNmb.task}}</span></span>
+                                  </div>
+                                </li>
+                                <li data-bugtype="Require">
+                                  <div class="cell">
+                                    <span class="label label-primary" :class="{active:infoNmb.demand < 1}" ><em>需求</em> <span>{{infoNmb.demand}}</span></span>
+                                  </div>
+                                </li>
+                              </ul>
+                              <ul id="priorityCount" class="bugPriorityCount clearfix">
+                                <li data-priority="Urgent">
+                                  <div class="cell">
+                                    <span class="label label-danger" :class="{active:infoNmb.urgent < 1}">急 {{infoNmb.urgent}}</span>
+                                  </div>
+                                </li>
+                                <li data-priority="High">
+                                  <div class="cell">
+                                    <span class="label label-warning" :class="{active:infoNmb.high < 1}">高 {{infoNmb.high}}</span>
+                                  </div>
+                                </li>
+                                <li data-priority="Medium">
+                                  <div class="cell">
+                                    <span class="label label-primary" :class="{active:infoNmb.middle < 1}">中 {{infoNmb.middle}}</span>
+                                  </div>
+                                </li>
+                                <li data-priority="Low">
+                                  <div class="cell">
+                                    <span class="label label-info" :class="{active:infoNmb.low < 1}">低 {{infoNmb.low}}</span>
+                                  </div>
+                                </li>
+                              </ul>
+                          </li>
+                          <li >
+                            <div class="projectDayNum " :class="{active:infoNmb.projectRunning < 1}" ><em class="info">项目运行</em><span>{{infoNmb.projectRunning}} 天</span><p><i class="fa fa-rocket"></i></p></div>
+                          </li>
+                          <li  >
+                          <div class="projectUserNum" :class="{active:infoNmb.members < 1}" ><em class="info">项目成员</em><span>{{infoNmb.members}}</span><p><i class="fa fa-users"></i></p></div>
+                          </li>
+                            <li  data-toggle="modal" >
+                              <div class="projectProductNum" :class="{active:infoNmb.product < 1}" ><em class="info">项目产品</em><span>{{infoNmb.product}}</span><p><i class="fa fa-coffee"></i></p><p></p></div>
+                            </li>
+                      </ul>
+                  </div>
+                  <div class="pd34 clearfix" style="padding-top: 1px">
+                    <ul class="bugNum bugPlanNum clearfix" >
+                      <li >
+                        <div class="cell " :class="{PlanNumClass:infoNmb.today < 1}">
+                          <span class="Today">今天</span>
+                          <em class="em-Today">{{infoNmb.today}}</em>
+                        </div>
+                      </li>
+                      <li data-state="Expired">
+                        <div class="cell " :class="{PlanNumClass:infoNmb.overdue < 1}">
+                          <span class="Expired">已过期</span><em class="em-Expired">{{infoNmb.overdue}}</em>
+                        </div>
+                      </li>
+                      <li data-state="TodayExit">
+                        <div class="cell " :class="{PlanNumClass:infoNmb.todayEnd < 1}">
+                          <span class="TodayExit">今天结束</span><em class="em-TodayExit">{{infoNmb.todayEnd}}</em>
+                        </div>
+                      </li>
+                      <li data-state="TodayStart">
+                        <div class="cell " :class="{PlanNumClass:infoNmb.start < 1}">
+                          <span class="TodayStart">今天开始</span><em class="em-TodayStart">{{infoNmb.start}}</em>
+                        </div>
+                      </li>
+                        <li data-state="Tomorrow">
+                          <div class="cell " :class="{PlanNumClass:infoNmb.tomorrow < 1}">
+                            <span class="Tomorrow">明天</span><em class="em-Tomorrow">{{infoNmb.tomorrow}}</em>
+                          </div>
+                        </li>
+                        <li data-state="Week">
+                          <div class="cell " :class="{PlanNumClass:infoNmb.week < 1}">
+                            <span class="Week">本周</span><em class="em-Week">{{infoNmb.week}}</em>
+                          </div>
+                        </li>
+                        <li data-state="WeekExit">
+                          <div class="cell " :class="{PlanNumClass:infoNmb.weekEnd < 1}">
+                            <span class="WeekExit">本周结束</span><em class="em-WeekExit">{{infoNmb.weekEnd}}</em>
+                          </div>
+                        </li>
+                      </ul>
+                  </div> 
+                </div> 
+                <!-- 首页更多列表start -->
+                  <div class="row">
+                      <div class="col-md-6" style="padding-right:0px">
+                          <div class="pTable">
+                              <div class="pTable-title pInfo">
+                                  <h5 ><span>最新问题</span> <span class="more" @click="change('iconQs')" >更多</span></h5>
+                              </div>
+                              <div class="pTable-content project-latest-bug" >
+                                  <div class="table table-hover bugTable">
+                                    <div class="last-bugs" @click="bugclick(item,index)"   v-for="(item,index) in bugList" >
+                                      <span class="defaultColor" alt="产品" title="产品">{{item.product}}</span> 
+                                      <span class="bugListModule" alt="模块" title="模块">{{item.module}} </span>
+                                       {{item.title}} 
+                                 
+                                       <span class="label bugListPlanVersion" v-if="item.planVersion !='' " alt="计划版本a" title="计划版本">{{item.planVersion}}</span> 
+
+                                      <p class="pd12">
+
+                                        <span class="label " v-if="item.problem=='缺陷'" style="padding:.3em .6em .3em;color:#fff;background:#d9534f">缺陷</span>
+                                        <span class="label " v-if="item.problem=='需求'" style="padding:.3em .6em .3em;color:#fff;background:#337ab7">需求</span>
+                                        <span class="label " v-if="item.problem=='任务'" style="padding:.3em .6em .3em;color:#fff;background:#f0ad4e">任务</span>
+
+                                        <span class="label " style="color:#fff;background:#d9534f"  v-if="item.process=='未解决'"  >未解决</span>
+                                        <span class="label label-success" v-if="item.process=='已解决'"  >已解决</span>
+                                        <span class="label label-success" v-if="item.process=='已关闭'"  >已关闭</span>
+                                        <span class="label label-success" v-if="item.process=='已延期'"  >已延期</span>
+                                       
+                                        <span class="label" style="color:#fff;background:#f0ad4e" v-if="item.process=='待审核'"  >待审核</span>
+                                         <span class="label " style="color:#fff;background:#f0ad4e" v-if="item.process=='已拒绝'"  >已拒绝</span>
+
+                                        <span class="label label-info"   v-if="item.priority==4">低</span>
+                                        <span class="label label-primary"   v-if="item.priority==3">中</span>
+                                        <span class="label label-warning"   v-if="item.priority==2">高</span>
+                                        <span class="label label-danger"   v-if="item.priority==1">急</span>
+
+                                        <span class="fr">{{item.creationTime.substring(0,10)}}</span>
+                                      </p>
+                                    </div>
+                                    <div class="last-bugs" @click="change('iconQs')"  v-if=" bugList.length>0" > 更多 </div>
+                                    <div class="last-bugs" v-if=" bugList.length==0" > 暂无问题！ </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6" style="padding-left: 7px">
+                          <div class="pTable">
+                              <div class="pTable-title pInfo">
+                                  <h5><span>最新通知</span> <span class="more" id="urgentMoreBtn">更多</span></h5>
+                              </div>
+                              <div class="pTable-content project-urgent-bug" >
+                                  <!-- <div class="last-notices">
+                                    <span class="label label-defaultColor" style="display:inline-block">置顶</span>
+                                     gdggdf&nbsp;gfg
+                                     <p class="pd12">
+                                      <span class="label label-info">信息公布</span> 
+                                      <span class="fr">刚刚</span>
+                                    </p>
+                                  </div>
+                                  <div class="last-notices" >
+                                   gdggdf&nbsp;gfg
+                                       <p class="pd12">
+                                        <span class="label label-info">信息公布</span> 
+                                        <span class="fr">2017-04-24</span>
+                                      </p>
+                                    </div> -->
+
+                                  <div class="table table-hover noticeTable"><div class="last-notices">暂无通知！</div></div>
+                                  
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                <!-- 首页更多列表end -->
+            </div>
+            <!--活动问题  -->
+            <div class="item-box iconAt">
+                <div class="hd-box clearfix">
+                    <h4 class="fl">活动问题</h4>
+                    <div class="hd-btn-box fr">
+                      <a class="hd-btn icon-problem" @click="submintfn()"  href="javascript:void(0)">提交问题</a>
+                    </div>
+                </div>
+                <div class="list-wapper">
+                  <div class="pd12" >
+                    <ul class="nav nav-pills">
+                      <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" >问题类型：全部 <span class="caret caret-icon"></span></a>
+                        <ul class="dropdown-menu product-dropdown-menu">
+                          <li><a href="javascript:void(0)" >全部</a></li>
+                          <li><a href="javascript:void(0)" ><i class="fa"></i><em>缺陷</em></a></li>
+                          <li><a href="javascript:void(0)" ><i class="fa"></i><em>任务</em></a></li>
+                          <li><a href="javascript:void(0)" ><i class="fa"></i><em>需求</em></a></li>
+                        </ul>
+                      </li>
+                      <li role="presentation" class="dropdown">
+                          <a class="dropdown-toggle" href="#" role="button" >状态：全部 <span class="caret caret-icon"></span></a>
+                          <ul class="dropdown-menu product-dropdown-menu">
+                              <li><a href="javascript:void(0)" >全部</a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>未解决</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>待审核</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>已拒绝</em></a></li>
+                          </ul>
+                      </li>
+                      <li role="presentation" class="dropdown">
+                          <a class="dropdown-toggle" href="#" role="button" >优先级：全部 <span class="caret caret-icon"></span></a>
+                          <ul class="dropdown-menu product-dropdown-menu">
+                              <li><a href="javascript:void(0)" >全部</a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>急</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>高</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>中</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>低</em></a></li>
+                          </ul>
+                      </li>
+                    </ul> 
+                  </div>
+
+                  <!-- 列表 -->
+                  <div class="pTable">
+                    <div class="pTable-content customTable">
+                      <div id="dataTables_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                        <table class="table table-hover bugTable no-footer dataTable" >
+                          <thead>
+                            <tr role="row">
+                                <th class="center" style="width:120px;"  >类型</th>
+                                <th  >标题</th>
+                                <th style="width:85px">状态</th>
+                                <th style="width:60px">优先级</th>
+                                <th style="width:60px" >处理人</th>
+                                <th style="width:60px" >分配人</th>
+                                <th style="width:120px;">创建时间</th>
+                                <th style="width:120px;"  >修改时间</th>
+                            </tr>
+                          </thead>
+                            <tbody>
+                              <tr>
+                                  <td class="center" ><span class="label" style="padding:2px 6px;color:#fff;background:#d9534f">缺陷</span></td>
+                                  <td ><span class="defaultColor" alt="产品" title="产品"> </span><span class="bugListModule" alt="模块" title="模块">模块2 </span> 问题2  <span class="label bugListPlanVersion" alt="计划版本" title="计划版本">谷歌</span></td>
+                                  <td ><span class="label label-success">已关闭</span></td>
+                                  <td ><span class="label label-primary">中</span></td>
+                                  <td >波爷</td>
+                                  <td >波爷</td>
+                                  <td >2017-04-22</td>
+                                  <td >2017-04-22</td>
+                              </tr>
+                              <tr >
+                                  <td class="center" ><span class="label" style="padding:2px 6px;color:#fff;background:#d9534f">缺陷</span></td>
+                                  <td ><span class="defaultColor" alt="产品" title="产品"> </span><span class="bugListModule" alt="模块" title="模块">急急急</span>急急急<span class="label bugListPlanVersion" alt="计划版本" title="计划版本">谷歌</span> </td>
+                                  <td ><span class="label label-warning">待审核</span></td>
+                                  <td ><span class="label label-primary">中</span></td>
+                                  <td >波爷</td>
+                                  <td >波爷</td>
+                                  <td >2017-04-22</td>
+                                  <td >2017-04-22</td>
+                              </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6" style="display: none;">
+                                <div class="dataTables_paginate paging_simple_numbers">
+                                    <ul class="pagination">
+                                        <li class="paginate_button previous disabled" aria-controls="dataTables" tabindex="0" id="dataTables_previous"><a href="#">上一页</a></li>
+                                        <li class="paginate_button active" aria-controls="dataTables" tabindex="0"><a href="#">1</a></li>
+                                        <li class="paginate_button next disabled" aria-controls="dataTables" tabindex="0" id="dataTables_next"><a href="#">下一页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- 所有问题 -->
+            <div class="item-box iconQs">
+                <div class="hd-box clearfix">
+                    <h4 class="fl">所有问题</h4>
+                    <div class="hd-btn-box fr">
+                      <a class="hd-btn icon-problem" @click="submintfn()"  href="javascript:void(0)">提交问题</a>
+                    </div>
+                </div>
+                <div class="list-wapper">
+                  <div class="pd12" >
+                    <ul class="nav nav-pills">
+                     <!--  <m-screen title="问题类型" ></m-screen> -->
+                     <!--  <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" >问题类型：全部 <span class="caret caret-icon"></span></a>
+                        <ul class="dropdown-menu product-dropdown-menu">
+                          <li><a href="javascript:void(0)" >全部</a></li>
+                          <li class="ischeck"  ><a href="javascript:void(0)" ><i class="fa "></i><em>缺陷</em></a></li>
+                          <li><a href="javascript:void(0)" ><i class="fa "></i><em>任务</em></a></li>
+                          <li><a href="javascript:void(0)" ><i class="fa "></i><em>需求</em></a></li>
+                        </ul>
+                      </li> -->
+                     <!--  <m-screen title="状态" ></m-screen>
+                      <m-screen title="优先级" ></m-screen> -->
+                      <!-- <li role="presentation" class="dropdown">
+                          <a class="dropdown-toggle">状态：全部 <span class="caret caret-icon"></span></a>
+                          <ul class="dropdown-menu product-dropdown-menu">
+                              <li><a href="javascript:void(0)" >全部</a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa "></i><em>未解决</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa "></i><em>待审核</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa "></i><em>已拒绝</em></a></li>
+                          </ul>
+                      </li>
+
+                      <li role="presentation" class="dropdown">
+                          <a class="dropdown-toggle" >优先级：全部 <span class="caret caret-icon"></span></a>
+                          <ul class="dropdown-menu product-dropdown-menu">
+                              <li><a href="javascript:void(0)" >全部</a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>急</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>高</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>中</em></a></li>
+                              <li><a href="javascript:void(0)" ><i class="fa"></i><em>低</em></a></li>
+                          </ul>
+                      </li> -->
+                    </ul> 
+                  </div>
+
+                  <!-- 列表 -->
+                  <div class="pTable">
+                    <div class="pTable-content customTable">
+                      <div id="dataTables_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                        <table class="table table-hover bugTable no-footer dataTable" >
+                          <thead>
+                            <tr role="row">
+                                <th class="center" style="width:120px;">类型</th>
+                                <th  >标题</th>
+                                <th style="width:85px" >状态</th>
+                                <th style="width:60px">优先级</th>
+                                <th style="width:120px" >处理人</th>
+                                <th style="width:120px" >分配人</th>
+                                <th style="width:120px;">创建时间</th>
+                                <th style="width:120px;">结束时间</th>
+                            </tr>
+                          </thead>
+                            <tbody>
+                              <tr @click="bugclick(item,index)"   v-for="(item,index) in bugList" >
+                                
+                                  <td class="center" v-if="item.problem=='缺陷'" >
+                                    <span class="label" style="padding:2px 6px;color:#fff;background:#d9534f">缺陷</span>
+                                  </td>
+                                  <td class="center" v-if="item.problem=='需求'" >
+                                    <span class="label" style="padding:2px 6px;color:#fff;background:#337ab7">需求</span>
+                                  </td>
+                                  <td class="center" v-if="item.problem=='任务'" >
+                                    <span class="label" style="padding:2px 6px;color:#fff;background:#f0ad4e">任务</span>
+                                  </td>
+
+                                  <td class="title-box">
+                                    <span class="defaultColor" alt="产品" title="产品">{{item.title}}</span>
+                                    <span class="label bugListPlanVersion" alt="计划版本" title="计划版本">{{item.planVersion}}</span>
+                                  </td>
+
+                                  <td v-if="item.process=='未解决'"  ><span class="label " style="color:#fff;background:#d9534f"  >未解决</span></td>
+                                  <td v-if="item.process=='已解决'"  ><span class="label label-success"   >已解决</span></td>
+                                  <td  v-if="item.process=='已关闭'" ><span class="label label-success"   >已关闭</span></td>
+                                  <td  v-if="item.process=='已延期'"  ><span class="label label-success"  >已延期</span></td>
+                                  <td v-if="item.process=='待审核'" ><span class="label " style="color:#fff;background:#f0ad4e"  >待审核</span></td>
+                                  <td v-if="item.process=='已拒绝'"><span class="label " style="color:#fff;background:#f0ad4e"   >已拒绝</span></td>
+
+                                  <td v-if="item.priority==4" ><span class="label label-info"  >低</span></td>
+                                  <td v-if="item.priority==3" ><span class="label label-primary"  >中</span></td>
+                                  <td v-if="item.priority==2"><span class="label label-warning"  >高</span></td>
+                                  <td v-if="item.priority==1"><span class="label label-danger"  >急</span></td>      
+
+                                  <td >{{item.recipient}}</td>
+                                  <td >{{item.userId}}</td>
+                                  <td >{{item.planDate}}</td>
+                                  <td >{{item.endDate}}</td>
+                              </tr>
+                             
+                            </tbody>
+                        </table>
+                        <div class="row" style="display:none">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6" >
+                                <div class="dataTables_paginate paging_simple_numbers">
+                                    <ul class="pagination">
+                                        <li class="paginate_button previous disabled" aria-controls="dataTables" tabindex="0" id="dataTables_previous"><a href="#">上一页</a></li>
+                                        <li class="paginate_button active" aria-controls="dataTables" tabindex="0"><a href="#">1</a></li>
+                                        <li class="paginate_button next disabled" aria-controls="dataTables" tabindex="0" id="dataTables_next"><a href="#">下一页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!--我的待办  -->
+            <div class="item-box iconDb">
+                <div class="hd-box clearfix">
+                    <h4 class="fl">我的待办</h4>
+                    <div class="hd-btn-box fr">
+                      <a class="hd-btn icon-problem" @click="submintfn()"  href="javascript:void(0)">提交问题</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 我的分配 -->
+            <div class="item-box iconMyget">
+                <div class="hd-box clearfix">
+                    <h4 class="fl">我的分配</h4>
+                    <div class="hd-btn-box fr">
+                      <a class="hd-btn icon-problem" @click="submintfn()"  href="javascript:void(0)">提交问题</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- page页面 end -->
+      </div>
+      
+      <!-- 项目列表start -->
+        
+        <div class="projecet-box wrapper" v-if="ismyproject" >
+            <div class="hd-box  padt30 clearfix">
+                <div class="hd-btn-box fr">
+                  <a class="hd-btn icon-problem" @click="CreateProbtn()"  href="javascript:void(0)">创建项目</a>
+                </div>
+            </div>
+             <div class="pro-box padt20">
+
+              
+              <div class="col-sm-6 col-md-4 col-lg-3" @click="CreateProbtn()"  v-if="myProjectList.list<1"  >
+                <div class="weibg">
+                  <div class="img-bxo" style="padding-top:30px;"  >
+                    <img src="/views/img/jh.png" style="width:120px;height:120px" >
+                  </div>
+                  <div class="time-box">
+                    <span class="textOverHiden">添加项目</span>
+                  </div>  
+                </div>
+              </div>          
+
+
+              <div class="col-sm-6 col-md-4 col-lg-3" v-for="item in myProjectList.list"  >
+                <div class="weibg">
+                  <h4 class="textOverHiden  data-pencil">
+                    <span class="projectTitle">
+                      <span class="pName">{{item.projectName}}</span>
+                    </span>
+                    <p class="mou-box">
+                      <span>活动问题<label class="badge bgDefault"></label></span>
+                      <span>我的待办<label class="badge bgYellow"></label></span>
+                    </p>
+                  </h4>
+                  <div class="img-bxo"  @click="selectToProject(item,'my')" >
+                    <img src="/views/img/app-default.jpg" >
+                  </div>
+                  <div class="time-box">
+                    <span class="textOverHiden">{{item.founder}}</span>
+                    <span class="v-middle"> 于{{item.creationDate.substring(0,10)}}创建</span>
+                  </div>  
+                </div>
+              </div>
+
+            </div>   
+        </div>
+        <!-- 创建项目输入框 -->
+        <div class="flaot-bg"  v-if="CreateProject.CreateProjectShow" >
+          <div class="while-box padb16 clearfix">
+              <div class='modal-header pos-r'>
+                  <h4>指派</h4>
+                  <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+              </div>
+              <div class="col-sm-12 matp16 pd0 pdl5">
+
+                <div class="col-sm-7 ">
+                  <label class="col-sm-3 control-label " >项目名称</label>
+                  <div class="col-sm-9 ">
+                      <input class="form-control no-rudius" v-model="CreateProject.CreateProjectName"  type="text" placeholder="输入项目名称"  >
+                  </div>
+                </div>
+
+                 <div class="col-sm-5 check-box">
+                      <span  class="form-control no-rudius" @click="getusersbig()" >选择人员（可多选）</span>
+                      <div class=" checkfloat-box " v-if="CreateProject.listshow" >
+                        <ul class="checkfloat-ul" >
+                          <li  v-for ="(item,index) in CreateProject.CreateProjectList" > 
+                            <label class="priority " v-bind:class="{checked:item.ischecked}"  @click="selectProduct(item)"  >
+                                <span ></span><em class="checktxt">{{item.userName}}</em>
+                            </label>
+                          </li>
+                        </ul>
+                         <div class="col-sm-12-btn-box matp16"> 
+                           <a class="btn-default btn" @click="CreateProject.listshow = !CreateProject.listshow" href="javascript:void(0)">取消</a>
+                           <a class="btn btn-info noborder" @click="changeCheckAllState()"  href="javascript:void(0)">确定</a>
+                         </div>
+                      </div>
+                  </div>
+
+                <div class="col-sm-12 matp16 pd0">
+                    <label class="col-sm-2 pal0 control-label ">项目描述</label>
+                    <div class="col-sm-10 ">
+                       <textarea class="form-control textarea" v-model="CreateProject.CreateProjectdescribe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                    </div>
+                </div>
+
+              </div>   
+
+              <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+                <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+                <a class="btn btn-info noborder" @click="myprojectbtn()"  href="javascript:void(0)">提交</a>
+              </div>
+
+          </div>
+        </div>
+
+       <!-- 项目列表 end -->
+
+     <!-- bug详情 -->
+     <div class="bugInfoPage animated fadeInRightBig" v-if="isbugshow">
+        <div class="bugInfoTop">
+
+            <span class="btnicon fl" @click="isbugshow=false" >
+              <em class="bugInfoBack" alt="隐藏" title="隐藏"></em>
+            </span>
+
+            <!-- 未解决并且未指派 -->
+           <!--  <span class="btn0" v-if="bugdetiel.process=='未解决' && bugdetiel.recipient==null" >
+              <button class="btn btn-primary" type="button">评论</button> 
+              <button class="btn btn-primary" @click="Assign()" type="button">指派</button>
+              <button class="btn btn-primary" @click="Close()" type="button">关闭</button>
+              <button class="btn btn-primary"  @click="Delay()" type="button">延期</button>
+            </span> -->
+
+             <!-- 未解决并已指派 -->
+            <span class="btn0" v-if="bugdetiel.process=='未解决'&& bugdetiel.recipient != null" >
+              <!-- <button class="btn btn-primary" type="button">评论</button>  -->
+            <!--   <button class="btn btn-primary" @click="Assign()" type="button">指派</button> -->
+              <button class="btn btn-primary" @click="Repair()" type="button">修复</button>
+              <button class="btn btn-primary" @click="Refuse()" type="button">拒绝</button>
+              <button class="btn btn-primary" @click="Delay()" type="button">延期</button>
+              <button class="btn btn-primary" @click="Close()" type="button">关闭</button>
+            </span>
+
+            <!-- 待审核并已指派 -->
+            <span class="btn0" v-if="bugdetiel.process=='待审核'&& bugdetiel.recipient != null" >
+             <!--  <button class="btn btn-primary" type="button">评论</button>  -->
+              <!-- <button class="btn btn-primary" @click="Assign()" type="button">指派</button> -->
+              <button class="btn btn-primary" @click="Adopt()"  type="button">通过</button>
+              <button class="btn btn-primary" @click="noAdopt()" type="button">不通过</button>
+              <button class="btn btn-primary" @click="Close()" type="button">关闭</button>
+            </span>
+             
+             <!-- 已解决并已指派 或者已关闭 或者 已延期 -->
+            <span class="btn0" v-if="bugdetiel.process=='通过' || bugdetiel.process=='已关闭' || bugdetiel.process=='已延期'  || bugdetiel.process=='已解决' || bugdetiel.process=='已拒绝' " >
+              <!-- <button class="btn btn-primary" type="button">评论</button>  -->
+              <button class="btn btn-primary" @click="openAgain()" type="button">再打开</button>
+            </span> 
+
+            <span class="btn1 btnicon fr">
+              <i class="fa-modify" @click="modifyGetdata()"  alt="修改" title="修改"></i>  
+            </span>
+        </div>
+        <div class="bugInfoContent bugInfoPageContent" >
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
+              <div class="bugInfoPageNr" style="overflow-x: hidden; width: auto; height: 100%;">
+                <div class="panel-default bugInfo">
+                    <div class="row">
+                        <label class="col-sm-12  bugInfoTitle">
+
+                          <span class="label " v-if="bugdetiel.problem=='缺陷'" style="padding:.3em .6em .3em;color:#fff;background:#d9534f">缺陷</span>
+                          <span class="label " v-if="bugdetiel.problem=='需求'" style="padding:.3em .6em .3em;color:#fff;background:#337ab7">需求</span>
+                          <span class="label " v-if="bugdetiel.problem=='任务'" style="padding:.3em .6em .3em;color:#fff;background:#f0ad4e">任务</span>
+                          {{bugdetiel.title}}
+                        </label>
+                          <div class="col-sm-12 bugDescFirstHistory">
+                          <div class="alert bugInfoHistories" role="alert">
+                              <span class="name">
+                               任务被指派给: <b>{{bugdetiel.recipient}}</b>
+                              </span>
+                                <i class="fa fa-edit hoption" alt="修改备注" title="修改备注"></i>
+                                <i class="fa fa-trash-o hoption" alt="删除备注" title="删除备注" ></i>
+                                <span class="fr">{{bugdetiel.planDate}}</span>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">项目</label>
+                            <div class="col-sm-9 bugInfoProject txt pd0">{{bugdetiel.projectName}}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">产品</label>
+                            <div class="col-sm-9 bugInfoProduct txt pd0">{{bugdetiel.product}}</div>
+                        </div>
+                    </div>
+                   <!--  <div class="row" >
+                        <div class="col-sm-1 pdr0">
+                            <label class="col-sm-12  pd0">模块</label>
+                        </div>
+                        <div class="col-sm-10" style="padding-left: 5%" ><div class="col-sm-11 bugInfoModuleName txt pd0">{{bugdetiel.module}}</div></div>
+                    </div> -->
+                    <!-- <div class="row" >
+                        <div class="col-sm-6">
+                            <div >
+                                <label class="col-sm-3  pd0">影响版本</label>
+                                <div class="col-sm-9 bugInfoVersion txt pd0"><span class="label Version cursor" alt="影响版本" title="影响版本" >{{bugdetiel.impact}}</span></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" id="bugInfoVerifyVersionDiv">
+                            <label class="col-sm-3  pd0">审核版本</label>
+                            <div class="col-sm-9 bugInfoVerifyVersion txt pd0"></div>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-sm-1 pdr0">
+                            <label class="col-sm-12  pd0">环境</label>
+                        </div>
+                        <div class="col-sm-11" style="padding-left: 5%"><div class="col-sm-11 bugInfoEnvironment txt pd0">{{bugdetiel.environment}}</div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">状态</label>
+                            <div class="col-sm-9 bugInfoState txt pd0"> 
+                               <span class="label " style="color:#fff;background:#d9534f"  v-if="bugdetiel.process=='未解决'"  >{{bugdetiel.process}}</span>
+                              <span class="label label-success" v-if="bugdetiel.process=='已解决'"  >{{bugdetiel.process}}</span>
+                              <span class="label label-success" v-if="bugdetiel.process=='已关闭'"  >{{bugdetiel.process}}</span>
+                              <span class="label label-success" v-if="bugdetiel.process=='已延期'"  >{{bugdetiel.process}}</span>
+                              <span class="label" style="color:#fff;background:#f0ad4e" v-if="bugdetiel.process=='待审核'"  >{{bugdetiel.process}}</span>
+                              <span class="label " style="color:#fff;background:#f0ad4e" v-if="bugdetiel.process=='已拒绝'"  >{{bugdetiel.process}}</span>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">优先级</label>
+                            <div class="col-sm-9 bugInfoPriority txt pd0"  v-if="bugdetiel.priority==4"  ><span class="label label-info">低</span></div>
+                            <div class="col-sm-9 bugInfoPriority txt pd0"  v-if="bugdetiel.priority==3"  ><span class="label label-primary">中</span></div>
+                            <div class="col-sm-9 bugInfoPriority txt pd0"  v-if="bugdetiel.priority==2"  ><span class="label label-warning">高</span></div>
+                            <div class="col-sm-9 bugInfoPriority txt pd0"  v-if="bugdetiel.priority==1"  ><span class="label label-danger">急</span></div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">分配人</label>
+                            <div class="col-sm-9 bugInfoAssign txt pd0">{{userName}}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3 pd0">处理人</label>
+                            <div class="col-sm-9 bugInfoFixedTo txt pd0">{{bugdetiel.recipient}}</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">计划日期</label>
+                            <div class="col-sm-9 txt bugInfoTreatment pd0"><span class="">{{bugdetiel.planDate.substring(0,10)}}</span></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-sm-3  pd0">截止日期</label>
+                            <div class="col-sm-9 txt bugInfoTreatment2 pd0"><span class="red">{{bugdetiel.endDate.substring(0,10)}}</span></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6" >
+                            <label class="col-sm-3  pd0">计划版本</label>
+                            <div class="col-sm-9 planVersion bugInfoPlanVersion txt pd0 relative">
+                              <span v-if="bugdetiel.planVersion !='' " class="label cursor"><i class="i-left"></i>{{bugdetiel.planVersion}}<i class="i-right"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6"  style="">
+                            <label class="col-sm-3  pd0">迭代</label>
+                            <div class="col-sm-9 bugInfoSprints txt pd0"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-10"  style="">
+                            <label class="col-sm-3  pd0">问题描述</label>
+                            <div class="col-sm-9 bugInfoSprints txt pd0">{{bugdetiel.describe}}</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 bugInfoHistories bugHistoryModifyHide">
+                      <h5>日志</h5>
+                      <p  v-for="(item,index) in bugdetiel.descriptionBean">
+                        <span class="name">
+                          <b>{{item.userName}}</b>
+                        </span>
+                        <span class="name">{{item.description}}</span>
+                        <span class="right">{{item.datae.substring(0,16)}}</span>
+                      </p>
+                    </div>
+                </div>
+            </div>
+            <div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 96.6497px;"></div>
+            <div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.9; z-index: 90; right: 1px;"></div>
+          </div>
+        </div>
+       
+      </div>
+      <!-- 输入框 -->
+      <f-form ref="profile"  :my-id="userId"  :isfloat="isfloat" v-on:isfloat="changeParent" :modify-data="modifydata"  ></f-form>
+
+      <!-- 修复输入框 -->
+      <div class="flaot-bg" v-if="isRepairobj.isRepair" >
+        <div class="while-box padb16 clearfix">
+            <div class='modal-header pos-r'>
+                <h4>修复</h4>
+                <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+            </div>
+            <div class="col-sm-12 matp16 pd0 pdl5">
+              <div class="col-sm-12 matp16 pd0">
+                  <label class="col-sm-2 pal0 control-label ">备注</label>
+                  <div class="col-sm-10 ">
+                     <textarea class="form-control textarea" v-model="isRepairobj.describe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                  </div>
+              </div>
+            </div>   
+            <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+              <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+              <a class="btn btn-info noborder" @click="submitRepair()" href="javascript:void(0)">提交</a>
+            </div>
+        </div>
+      </div>
+
+      <!-- 通过输入框 -->
+      <div class="flaot-bg" v-if="isAdoptobj.isAdopt" >
+        <div class="while-box padb16 clearfix">
+            <div class='modal-header pos-r'>
+                <h4>通过</h4>
+                <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+            </div>
+            <div class="col-sm-12 matp16 pd0 pdl5">
+              
+              <div class="col-sm-12 matp16 pd0">
+                  <label class="col-sm-2 pal0 control-label ">备注</label>
+                  <div class="col-sm-10 ">
+                     <textarea class="form-control textarea" v-model="isAdoptobj.describe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                  </div>
+              </div>
+            </div>   
+            <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+              <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+              <a class="btn btn-info noborder" @click="submitAdopt()" href="javascript:void(0)">提交</a>
+            </div>
+        </div>
+      </div>
+        
+      <!-- 不通过输入框 -->
+      <div class="flaot-bg" v-if="isnoAdoptobj.isnoAdopt" >
+        <div class="while-box padb16 clearfix">
+            <div class='modal-header pos-r'>
+                <h4>不通过</h4>
+                <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+            </div>
+            <div class="col-sm-12 matp16 pd0 pdl5">
+              <div class="col-sm-12 matp16 pd0">
+                  <label class="col-sm-2 pal0 control-label ">备注</label>
+                  <div class="col-sm-10 ">
+                     <textarea class="form-control textarea" v-model="isnoAdoptobj.describe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                  </div>
+              </div>
+            </div>   
+            <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+              <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+              <a class="btn btn-info noborder" @click="submitnoAdopt()" href="javascript:void(0)">提交</a>
+            </div>
+        </div>
+      </div>
+
+      <!-- 已拒绝输入框 -->
+      <div class="flaot-bg" v-if="isRefuseobj.isRefuse" >
+        <div class="while-box padb16 clearfix">
+            <div class='modal-header pos-r'>
+                <h4>拒绝</h4>
+                <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+            </div>
+            <div class="col-sm-12 matp16 pd0 pdl5">
+              <div class="col-sm-12 matp16 pd0">
+                  <label class="col-sm-2 pal0 control-label ">备注</label>
+                  <div class="col-sm-10 ">
+                     <textarea class="form-control textarea" v-model="isRefuseobj.describe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                  </div>
+              </div>
+            </div>   
+            <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+              <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+              <a class="btn btn-info noborder" @click="submitRefuse()" href="javascript:void(0)">提交</a>
+            </div>
+        </div>
+      </div>
+
+      <!-- 关闭输入框 -->
+      <div class="flaot-bg" v-if="isCloseobj.isClose" >
+        <div class="while-box padb16 clearfix">
+            <div class='modal-header pos-r'>
+                <h4>关闭</h4>
+                <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+            </div>
+            <div class="col-sm-12 matp16 pd0 pdl5">
+              
+              <div class="col-sm-12 matp16 pd0">
+                  <label class="col-sm-2 pal0 control-label ">备注</label>
+                  <div class="col-sm-10 ">
+                     <textarea class="form-control textarea" v-model="isCloseobj.describe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                  </div>
+              </div>
+            </div>   
+            <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+              <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+              <a class="btn btn-info noborder" @click="submitClose()" href="javascript:void(0)">提交</a>
+            </div>
+        </div>
+      </div>
+
+       <!-- 已延期输入框 -->
+      <div class="flaot-bg" v-if="isDelayobj.isDelay" >
+        <div class="while-box padb16 clearfix">
+            <div class='modal-header pos-r'>
+                <h4>延期</h4>
+                <a class="close-btn pos-a"  @click="colsedelbtn()"  href="javascript:void(0)"></a>
+            </div>
+            <div class="col-sm-12 matp16 pd0 pdl5">
+              
+              <div class="col-sm-12 matp16 pd0">
+                  <label class="col-sm-2 pal0 control-label ">备注</label>
+                  <div class="col-sm-10 ">
+                     <textarea class="form-control textarea" v-model="isDelayobj.describe"  rows="5" placeholder="最多输入200个字符" style="height: 100px;"></textarea>
+                  </div>
+              </div>
+            </div>   
+            <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+              <a class="btn-default btn" @click="colsedelbtn()" href="javascript:void(0)">取消</a>
+              <a class="btn btn-info noborder" @click="submitDelay()" href="javascript:void(0)">提交</a>
+            </div>
+        </div>
+      </div>
+
+  
+
+      <!-- loading -->
+      <div class="flaot-bg" v-if="isloading" >
+          <img class="loading" src="/views/img/loading.png" alt="">
+      </div>
+  
+      <!-- tips -->
+      <div class="tips" id="tips" >提示语</div>
+
+    </div>
+    <script type="text/javascript">
+      require("pages/index/views");
+    </script>
+</body>
+</html>

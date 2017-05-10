@@ -1,0 +1,34 @@
+
+    <div class="calendar" v-show="isfloatinput" >
+        <div class="month">
+            <ul>
+                <li class="arrow" @click="pickPre(currentYear,currentMonth)">❮</li>
+                <li class="year-month">
+                    <span class="choose-year">{{ currentYear }}</span>
+                    <span class="choose-month">{{ currentMonth }}月</span>
+                </li>
+                <li class="arrow" @click="pickNext(currentYear,currentMonth)">❯</li>
+            </ul>
+        </div>
+        <ul class="weekdays">
+            <li>一</li>
+            <li>二</li>
+            <li>三</li>
+            <li>四</li>
+            <li>五</li>
+            <li style="color:red">六</li>
+            <li style="color:red">日</li>
+        </ul>
+        <ul class="days">
+            <li @click="pick(day)" v-for="day in days">
+                <!--今天-->
+                <span v-if="day.getMonth()+1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
+                <span v-else>
+                    <!--今天-->
+                    <span v-if="day.getFullYear() == new Date().getFullYear() && day.getMonth() == new Date().getMonth() && day.getDate() == new Date().getDate()" class="active">{{ day.getDate() }}</span>
+                <span v-else>{{ day.getDate() }}</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+

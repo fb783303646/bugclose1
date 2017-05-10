@@ -1,0 +1,11 @@
+<div class="input-group" @click="SelectShow()" >
+  <input type="text" class="form-control" v-show="myTypeInput" v-model="val" :data-value="valindex"   >
+  <span  class="form-control no-rudius"  v-show="!myTypeInput"  :data-value="valindex" >{{val}}</span>
+  <div class="input-group-btn">
+    <button type="button" class="btn btn-default dropdown-toggle"  ><span class="caret"></span></button>
+    <ul class="dropdown-menu pull-right" v-show="isSelectShow" >
+       <li v-for="(item,index) of computedList" @click="changeValueHandle(item,index)" ><a href="javascript:;">{{item.text}}</a></li>
+    </ul>
+    
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<header class="site-header">
+	<div class="wrapper-header-left-bg"></div>
+    <div class="wrapper-header clearfix">
+    	<a class="logo" href="javascript:;"><img src="/views/img/logozxi.png" alt=""></a>
+    	<div class="myproject-box">
+    		<a href="javascript:;" class="my-ems my-ems-me" @click="checkmyproject()" >我的项目</a>
+    		<div class="em-box">
+	    		<a href="javascript:;" class="my-ems my-ems-selet" @click="tabs()" >{{myProjectList.titleName}}</a>
+				<ul class="em-list" v-if="isShow">
+					<li @click="selectToProject(item)" v-for="item in myProjectList.list" ><a href="javascript:;"><img src="/views/img/app-default.jpg" alt="">{{item.projectName}}</a></li>
+				</ul>
+    		</div>
+    	</div>
+    	<div class="fr">
+    		<div class="my-name">	
+	    		<a href="javascript:;" class="my-ems my-ems-selet myselet"  @click="showfu()" >{{userName}}</a>
+	    		<ul class="em-list my-list" v-if="isShowfu" >
+					<!-- <li  @click="showfu()"><a href="javascript:;"><i class="icon-car"></i>我的项目1</a></li>
+					<li  @click="showfu()"><a href="javascript:;"><i class="icon-f"></i>我的项目2</a></li> -->
+					<li class="logout-btn"  @click="loginout()"><a href="javascript:;"><i class="icon-logout"></i>退出</a></li>
+				</ul>
+			</div>	
+    	</div>
+    </div>
+</header>

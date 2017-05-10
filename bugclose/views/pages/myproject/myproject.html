@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="bg-bgeaea htmlpdt3">
+<head>
+    <meta charset="UTF-8">
+    <title>我的项目</title>
+    <link rel="import" href="../includes/meta.html?__inline">
+</head>
+<body>
+    <div id="myproject">
+        
+        <div class="form-signin">
+            <h2 class="form-signin-heading">登陆</h2>
+            <div class="pad">
+                <input type="email"  class="form-control" v-model="userAccount"  placeholder="用户名">
+            </div> 
+            <div class="pad">
+                <input type="password"  class="form-control" v-model="userPassword" placeholder="密码">
+            </div>
+            <div class="pad">
+                <span class="btn btn-lg btn-primary btn-block" type="botton"  @click="getdata()" >登陆</span>
+            </div>
+            <p style="color:red;">{{message}}</p>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        require("pages/myproject/views");
+    </script>
+</body>
+</html>

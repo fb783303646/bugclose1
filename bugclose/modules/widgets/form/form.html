@@ -1,0 +1,172 @@
+  <div class="flaot-bg" v-if="isfloat" >
+    <div class="while-box">
+          <div class='modal-header pos-r'>
+              <h4>新建问题</h4>
+              <a class="close-btn pos-a"  @click="colsefun()"  href="javascript:void(0)"></a>
+          </div>
+          <div class="modal-body-box clearfix">
+              <ul class="tabs clearfix">
+                  <li :class="{active:shippingmethod == 1}" @click="shippingmethod=1" ><a href="javascript:;" >信息与描述</a></li>
+                  <li :class="{active:shippingmethod == 2}" @click="shippingmethod=2" ><a href="javascript:;" >人员与计划</a></li>
+              </ul>
+              <div class="tab-content-box clearfix">
+                  <div class="tabPane" :class="{active:shippingmethod == 1}" >
+                    <div class="col-sm-12 matp16 pd0 pdl5">
+                      <div class="col-sm-7 ">
+                        <label class="col-sm-3 control-label pdProduct">产品</label>
+                        <div class="col-sm-9 ">
+
+                        <f-select  :list="productList" :values="product" :my-type-input="true"  @changval="changvalfun" ></f-select>
+
+                        </div>
+                      </div>
+                      <div class="col-sm-5 pd0">
+                         <label class="col-sm-5 control-label pdProduct">问题类型</label>
+                          <div class="col-sm-7 pal0">
+
+                            <f-select  :list="problemList" :values="problem" :my-type-input="false" @changval="changvalfun" ></f-select>
+
+                          </div>
+                      </div>
+                    </div>
+                    <!-- <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">模块</label>
+                        <div class="col-sm-10 ">
+                          <f-select  :list="moduleList" :values="module" :my-type-input="false" @changval="changvalfun" ></f-select>
+                         
+                        </div>
+                    </div> -->
+
+                    <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">标题</label>
+                        <div class="col-sm-10 ">
+                            <input type="text" class="form-control" v-model="title" placeholder="标题" >
+                        </div>
+                    </div>
+
+                   <!--  <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">影响版本</label>
+                        <div class="col-sm-10 ">
+
+                          <f-select  :list="ImpactList" :values="Impact" :my-type-input="false"  @changval="changvalfun"></f-select>
+
+                        </div>
+                    </div> -->
+
+                    <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">环境</label>
+                        <div class="col-sm-10 ">
+                            <input type="text" class="form-control" v-model="environment"  placeholder="环境" >
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">描述</label>
+                        <div class="col-sm-10 ">
+                           <textarea class="form-control textarea" v-model="describe"  rows="5" placeholder="最多输入2000个字符" style="height: 100px;"></textarea>
+                        </div>
+                    </div>
+                    <!-- 上传图片 -->
+                  <!--   <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">图片</label>
+                        <div class="col-sm-10 ">
+                           <div class="upload-file form-control upload-file-bg" style="height: 100px;" >
+                             <div class="default" style="position: absolute; left: 0px; top: 0px;"></div>
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-sm-12-btn-box matp16">
+                      <a class="hd-btn icon-problem" href="javascript:void(0)">选择图片</a>
+                    </div> -->
+
+                  </div>
+                  <div class="tabPane" :class="{active:shippingmethod == 2}">
+                    <div class="col-sm-12 matp16 pd0 pdl5">
+                      <div class="col-sm-5"  >
+                        <label class="col-sm-4 control-label pdProduct">指派给</label>
+                        <div class="col-sm-8 ">
+                           <f-select ref="getusers"  :list="recipientList" :values="recipient" :my-type-input="false"  @changval="changvalfun" ></f-select> 
+                          <!-- <div class="input-group">
+                            <span type="text" class="form-control" ></span>
+                            <div class="input-group-btn">
+                              <button type="button" class="btn btn-default dropdown-toggle" ><span class="caret"></span></button>
+                              <ul class="dropdown-menu pull-right" v-show="selectbox.isGet" >
+                                <li><a href="#">功能</a></li>
+                                <li><a href="#">另一个功能</a></li>
+                                <li><a href="#">其他</a></li>
+                                <li><a href="#">分离的链接</a></li>
+                              </ul>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+                      <div class="col-sm-7 pd0">
+                         <label class="col-sm-3 control-label pdProduct">优先级</label>
+                          <div class="col-sm-9 pal0 pat10">
+                            <label class="priority " :class="{checked:priority == 1}" @click="selectProduct(1)">
+                                <span ><i >急</i></span>
+                            </label>
+                            <label class="priority" :class="{checked:priority == 2}" @click="selectProduct(2)">
+                                <span ><i >高</i></span>
+                            </label>
+                            <label class="priority " :class="{checked:priority == 3}" @click="selectProduct(3)">
+                                <span ><i >中</i></span>
+                            </label>
+                            <label class="priority " :class="{checked:priority == 4}" @click="selectProduct(4)">
+                                <span ><i >低</i></span>
+                            </label>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12 matp16 pd0">
+                        <label class="col-sm-2 pal0 control-label pdProduct">计划日期</label>
+                        <div class="col-sm-10 ">
+                            <div class="input-daterange input-group ">
+                                 <div class="data-input" >
+                                   <input type="text" @click="dateShow(1)"  v-model="planDate" class="input-sm form-control planDate_begin">
+                                    <vue-time v-on:planDate="changebegin" v-show="isfloatinput1"  ></vue-time>
+                                 </div>
+                                <span class="input-group-addon">到</span>
+                                <div class="data-input" > 
+                                    <input type="text" @click="dateShow(2)"  v-model="endDate" class="input-sm form-control planDate_begin"> 
+                                  <vue-time v-on:endDate="changeend" v-show="isfloatinput2" ></vue-time>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 matp16 pd0 pdl5">
+                      <div class="col-sm-7 ">
+                        <label class="col-sm-3 control-label pdProduct">计划版本</label>
+                        <div class="col-sm-9 ">
+                          <div class="input-group">
+                            <input type="text" class="form-control" v-model="planVersion" placeholder="计划版本" >
+                          </div>
+                        </div>
+                      </div>
+                     <!--  <div class="col-sm-5 pd0">
+                         <label class="col-sm-5 control-label pdProduct">迭代</label>
+                          <div class="col-sm-7 pal0">
+                            <f-select  :list="IterativeList" :values="IterativeName" :my-type-input="false" ></f-select> 
+                           
+                          </div>
+                      </div> -->
+                    </div>  
+                  </div>
+
+                  <!-- <div class="tabPane" :class="{active:shippingmethod == 3}">
+                    <div class="col-sm-12" style="padding-top:20px;">标题内容</div>
+                  </div> -->
+
+              </div>
+              
+              <div class="col-sm-12 col-sm-12-btn-box matp26 ">
+                <a class="btn-default btn"  @click="colsefun()" href="javascript:void(0)">取消</a>
+                <a class="btn btn-info noborder" @click="sumbmitbtn()"  href="javascript:void(0)">提交</a>
+              </div>
+          </div>
+    </div>
+  </div>
